@@ -73,19 +73,17 @@ AND FirstName Like 'J%';
 #Return LastName, FirstName, and CellPhone of employees who worked on a property in Seattle
 #must use a Subquery (G)
 SELECT LastName, FirstName, CellPhone
-FROM EMPLOYEE, PROPERTY_SERVICE, OWNED_PROPERTY
+FROM EMPLOYEE, PROPERTY_SERVICE
 WHERE EMPLOYEE.EmployeeID = PROPERTY_SERVICE.EmployeeID
-	AND PROPERTY_SERVICE.PropertyID = OWNED_PROPERTY.PropertyID
-    AND City = 'Seattle';
+	AND PROPERTY_SERVICE.PropertyID = (SELECT PropertyID FROM OWNED_PROPERTY WHERE City = 'Seattle');
+
     
 #Use a JOIN ON/JOIN or JOIN within the WHERE clause for G (H)
 SELECT LastName, FirstName, CellPhone
-FROM EMPLOYEE AS EMPLOYEE JOIN PROPERTY_SERVICE AND
-PROPERTY_SERVICE AS PROPERTY_SERVICE JOIN OWNED_PROPERTY
-ON EMPLOYEE.EmployeeID = PROPERTY_SERVICE.EmployeeID
-ON PROPERTY_SERVICE.PropertyID = OWNED_PROPERTY.PropertyID
-WHERE City = 'Seattle';
-
+FROM EMPLOYEE, PROPERTY_SERVICE, OWNED_PROPERTY
+WHERE EMPLOYEE.EmployeeID = PROPERTY_SERVICE.EmployeeID
+	AND PROPERTY_SERVICE.PropertyID = OWNED_PROPERTY.PropertyID
+    AND OWNED_PROPERTY.City = 'Seattle';
 
 #Return LastName, FirstName, and CellPhone of employees who worked on a property
 #owned by a corporation. Use a Subquery (I)
